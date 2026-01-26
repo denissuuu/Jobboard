@@ -1,13 +1,205 @@
 <!doctype html>
-<html lang="en">
+<html lang="fr">
   <head>
     <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>jobboard</title>
+    <title>Jobboard</title>
+    <link rel="stylesheet" href="src/style.css" />
+
   </head>
-  <body>
-    <div id="app"></div>
-    <script type="module" src="/src/main.js"></script>
+
+  <body class="bg-white text-neutral-900">
+    <a
+      href="#content"
+      class="sr-only focus:not-sr-only focus:fixed focus:left-3 focus:top-3 focus:z-50 focus:bg-white focus:px-3 focus:py-2 focus:ring-2 focus:ring-black"
+    >
+      Aller au contenu
+    </a>
+
+    <main id="content" class="mx-auto max-w-5xl p-4">
+      <div class="wf-shell min-h-[72vh] p-4 sm:p-6">
+        <section id="accueil" class="page">
+          <!-- top bar -->
+          <header class="mb-4 flex items-center justify-between">
+            <div class="text-xs font-semibold tracking-wide text-neutral-700">ACCUEIL</div>
+            <button class="wf-btn text-xs">Profil / Déconnexion</button>
+          </header>
+
+          <div class="grid gap-4 md:grid-cols-[220px_1fr]">
+            <!-- sidebar -->
+            <aside class="flex flex-col justify-between">
+              <div class="space-y-2">
+                <a class="wf-btn block w-full text-left" href="#accueil">Recherches</a>
+                <button class="wf-btn w-full text-left" type="button">Candidatures</button>
+                <button class="wf-btn w-full text-left" type="button">Messages</button>
+              </div>
+
+              <div class="space-y-2">
+                <a class="wf-btn block w-full text-left" href="#favoris">Favoris</a>
+                <a class="wf-btn block w-full text-left" href="#parametres">Paramètres</a>
+              </div>
+            </aside>
+
+            <!-- content -->
+            <div class="relative min-h-[52vh]">
+              <div class="grid h-full place-items-center">
+                <div class="w-full max-w-xl text-center">
+                  <div class="wf-bar mx-auto w-full max-w-lg">Recherche un stage</div>
+
+                  <div class="mt-5 flex justify-center">
+                    <input class="wf-input w-full max-w-lg" placeholder="Recherche un stage" />
+                  </div>
+
+                  <div class="mt-4">
+                    <a class="wf-btn inline-block px-10 text-sm" href="#recherche">Search</a>
+                  </div>
+                </div>
+              </div>
+
+              <!-- bouton Suivi en bas à droite (comme la maquette) -->
+              <div class="absolute bottom-0 right-0">
+                <a class="wf-btn inline-block text-xs" href="#suivi">Suivi →</a>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- =========================
+             PAGE: RECHERCHE
+             ========================= -->
+        <section id="recherche" class="page hidden">
+          <!-- top bar -->
+          <header class="mb-4 flex items-center justify-between">
+            <a class="wf-btn text-xs" href="#accueil">← Retour</a>
+            <button class="wf-btn text-xs">Profil / Déconnexion</button>
+          </header>
+
+          <div class="grid gap-4 md:grid-cols-[220px_1fr]">
+            <!-- sidebar (bas seulement dans la maquette, mais on garde simple) -->
+            <aside class="flex flex-col justify-end">
+              <div class="space-y-2">
+                <a class="wf-btn block w-full text-left" href="#favoris">Favoris</a>
+                <a class="wf-btn block w-full text-left" href="#parametres">Paramètres</a>
+              </div>
+            </aside>
+
+            <!-- content -->
+            <div class="min-h-[52vh]">
+              <div class="wf-bar mx-auto w-full max-w-xl">Stages recommandés</div>
+
+              <!-- liste scrollable -->
+              <div class="mt-6 wf-scroll mx-auto max-w-2xl">
+                <div class="max-h-[320px] overflow-y-auto pr-2 space-y-6">
+                  <!-- Item 1 -->
+                  <div class="space-y-2">
+                    <div class="text-sm font-semibold">Intitulé du stage</div>
+                    <div class="text-xs text-neutral-800">Entreprise</div>
+                    <div class="text-xs text-neutral-800">Ville</div>
+                    <div class="mt-2 flex gap-3">
+                      <button class="wf-btn text-xs">Voir l'offre</button>
+                      <button class="wf-btn text-xs">Sauvegarder</button>
+                    </div>
+                  </div>
+
+                  <!-- Item 2 -->
+                  <div class="space-y-2">
+                    <div class="text-sm font-semibold">Intitulé du stage</div>
+                    <div class="text-xs text-neutral-800">Entreprise</div>
+                    <div class="text-xs text-neutral-800">Ville</div>
+                    <div class="mt-2 flex gap-3">
+                      <button class="wf-btn text-xs">Voir l'offre</button>
+                      <button class="wf-btn text-xs">Sauvegarder</button>
+                    </div>
+                  </div>
+
+                  <!-- Item 3 -->
+                  <div class="space-y-2">
+                    <div class="text-sm font-semibold">Intitulé du stage</div>
+                    <div class="text-xs text-neutral-800">Entreprise</div>
+                    <div class="text-xs text-neutral-800">Ville</div>
+                    <div class="mt-2 flex gap-3">
+                      <button class="wf-btn text-xs">Voir l'offre</button>
+                      <button class="wf-btn text-xs">Sauvegarder</button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- =========================
+             PAGE: SUIVI
+             ========================= -->
+        <section id="suivi" class="page hidden">
+          <!-- top bar -->
+          <header class="mb-4 flex items-center justify-between">
+            <a class="wf-btn text-xs" href="#accueil">← Retour</a>
+            <button class="wf-btn text-xs">Profil / Déconnexion</button>
+          </header>
+
+          <div class="grid gap-4 md:grid-cols-[220px_1fr]">
+            <!-- sidebar bas -->
+            <aside class="flex flex-col justify-end">
+              <div class="space-y-2">
+                <a class="wf-btn block w-full text-left" href="#favoris">Favoris</a>
+                <a class="wf-btn block w-full text-left" href="#parametres">Paramètres</a>
+              </div>
+            </aside>
+
+            <!-- content -->
+            <div class="min-h-[52vh]">
+              <div class="wf-bar mx-auto w-full max-w-xl">Suivi</div>
+
+              <div class="mt-10 grid gap-6 sm:grid-cols-3">
+                <div class="wf-card">
+                  <div class="text-sm">Candidatures</div>
+                  <div class="mt-3 text-lg font-semibold">12</div>
+                </div>
+                <div class="wf-card">
+                  <div class="text-sm">Entretiens :</div>
+                  <div class="mt-3 text-lg font-semibold">3</div>
+                </div>
+                <div class="wf-card">
+                  <div class="text-sm">Réponses:</div>
+                  <div class="mt-3 text-lg font-semibold">4</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- =========================
+             PAGES: Favoris / Paramètres (simples)
+             ========================= -->
+        <section id="favoris" class="page hidden">
+          <header class="mb-4 flex items-center justify-between">
+            <a class="wf-btn text-xs" href="#accueil">← Retour</a>
+            <button class="wf-btn text-xs">Profil / Déconnexion</button>
+          </header>
+          <div class="wf-panel p-6 text-sm">
+            Favoris (maquette : bouton en bas à gauche).<br />
+            Ici tu pourras lister les offres sauvegardées (sans backend).
+          </div>
+        </section>
+
+        <section id="parametres" class="page hidden">
+          <header class="mb-4 flex items-center justify-between">
+            <a class="wf-btn text-xs" href="#accueil">← Retour</a>
+            <button class="wf-btn text-xs">Profil / Déconnexion</button>
+          </header>
+          <div class="wf-panel p-6 text-sm">
+            Paramètres (placeholder).
+          </div>
+        </section>
+      </div>
+    </main>
+
+    <!-- Navigation CSS-only via :target -->
+    <noscript>
+      <div class="mx-auto max-w-5xl p-4 text-sm">
+        Astuce : ce site fonctionne sans JavaScript. Utilise les liens pour naviguer.
+      </div>
+    </noscript>
   </body>
 </html>
