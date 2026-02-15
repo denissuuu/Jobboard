@@ -4,37 +4,68 @@
 
 @layer base {
   body {
-    @apply text-neutral-800;
+    @apply bg-slate-50 text-slate-800;
   }
 }
 
 @layer components {
   .btn {
-    @apply border border-neutral-400 bg-neutral-200 px-4 py-2 text-sm;
+    @apply inline-flex items-center justify-center rounded-lg border border-slate-200 bg-white px-4 py-2 text-sm font-medium text-slate-700;
   }
-
   .btn:hover {
-    @apply bg-neutral-100;
+    @apply bg-slate-100;
   }
-
   .btn:focus-visible {
-    @apply outline-none ring-2 ring-neutral-500;
+    @apply outline-none ring-2 ring-blue-400;
+  }
+  .btn-primary {
+    @apply border-blue-600 bg-blue-600 text-white;
+  }
+  .btn-primary:hover {
+    @apply bg-blue-700;
   }
 
   .card {
-    @apply border border-neutral-400 bg-neutral-200;
+    @apply rounded-xl border border-slate-200 bg-white;
   }
-
-  .card-title {
-    @apply text-sm font-semibold;
+  .card-body {
+    @apply p-4;
   }
-
+  .title {
+    @apply text-sm font-semibold text-slate-900;
+  }
   .muted {
-    @apply text-xs text-neutral-600;
+    @apply text-xs text-slate-500;
+  }
+
+  .shell {
+    @apply mx-auto w-full max-w-6xl;
+  }
+  .layout {
+    @apply grid gap-6 md:grid-cols-[240px_1fr];
+  }
+
+  .sidebtn {
+    @apply w-full rounded-lg px-3 py-2 text-left text-sm font-medium text-slate-700;
+  }
+  .sidebtn:hover {
+    @apply bg-slate-100;
+  }
+  .sidebtn-active {
+    @apply bg-blue-50 text-blue-700;
+  }
+  .sidebtn-disabled {
+    @apply opacity-50 cursor-not-allowed;
+  }
+
+  .topbar {
+    @apply flex items-center justify-between;
+  }
+  .badge {
+    @apply inline-flex items-center rounded-full bg-blue-50 px-2.5 py-1 text-xs font-medium text-blue-700;
   }
 }
 
-/* Accessibilité + éco */
 @media (prefers-reduced-motion: reduce) {
   * {
     animation: none !important;
