@@ -17,12 +17,25 @@ export default function App() {
     }
   });
 
-  const favJobs = useMemo(() => SEARCH_JOBS.filter((j) => favs.has(j.id)), [favs]);
+  const favJobs = useMemo(
+    () => SEARCH_JOBS.filter((j) => favs.has(j.id)),
+    [favs]
+  );
 
-  const toggleFav = (id) => {
+  const addFav = (id) => {
+    setFavs((prev) => {
+      if (prev.has(id)) return prev;
+      const next = new Set(prev);
+      next.add(id);
+      localStorage.setItem("favs", JSON.stringify([...next]));
+      return next;
+    });
+  };
+
+  const removeFav = (id) => {
     setFavs((prev) => {
       const next = new Set(prev);
-      next.has(id) ? next.delete(id) : next.add(id);
+      next.delete(id);
       localStorage.setItem("favs", JSON.stringify([...next]));
       return next;
     });
@@ -37,13 +50,11 @@ export default function App() {
               <div className="badge">{label(page)}</div>
               <div className="flex gap-2">
                 {page !== "home" && (
-                  <button className="btn" type="button" onClick={() => setPage("home")}>
+                  <button className="btn" onClick={() => setPage("home")}>
                     Retour
                   </button>
                 )}
-                <button className="btn" type="button">
-                  Profil
-                </button>
+                <button className="btn">Profil</button>
               </div>
             </div>
 
@@ -76,19 +87,17 @@ export default function App() {
                     onFollow={() => setPage("follow")}
                   />
                 )}
+
                 {page === "search" && (
-                  <Search jobs={SEARCH_JOBS} favs={favs} onToggleFav={toggleFav} />
+                  <Search jobs={SEARCH_JOBS} favs={favs} onAddFav={addFav} />
                 )}
-                {page === "favorites" && <Favorites jobs={favJobs} onRemoveFav={toggleFav} />}
+
+                {page === "favorites" && (
+                  <Favorites jobs={favJobs} onRemoveFav={removeFav} />
+                )}
+
                 {page === "follow" && <Follow />}
-                {page === "settings" && (
-                  <Settings
-                    onResetFavs={() => {
-                      localStorage.removeItem("favs");
-                      setFavs(new Set());
-                    }}
-                  />
-                )}
+                {page === "settings" && <Settings onResetFavs={() => removeAll(setFavs)} />}
               </main>
             </div>
           </div>
@@ -105,73 +114,70 @@ function Home({ query, setQuery, onSearch, onFollow }) {
         <div className="card">
           <div className="card-body">
             <div className="title">Recherche un stage</div>
-            <div className="muted mt-1">Tape n’importe quoi, tu auras 3 résultats fixes.</div>
+            <div className="muted mt-1">Résultats fixes, site démo</div>
           </div>
         </div>
 
         <input
           className="w-full rounded-lg border border-slate-200 bg-white px-4 py-3 text-sm outline-none focus:ring-2 focus:ring-blue-400"
-          placeholder="Ex : dev web, react, data…"
+          placeholder="Ex : développeur, react…"
           value={query}
           onChange={(e) => setQuery(e.target.value)}
           onKeyDown={(e) => e.key === "Enter" && onSearch()}
         />
 
-        <div className="flex justify-center gap-3">
-          <button className="btn btn-primary px-10" type="button" onClick={onSearch}>
-            Rechercher
-          </button>
-          <button className="btn" type="button" onClick={() => setQuery("")}>
-            Effacer
-          </button>
-        </div>
+        <button className="btn btn-primary px-10" onClick={onSearch}>
+          Rechercher
+        </button>
       </div>
 
-      <button className="btn absolute bottom-0 right-0" type="button" onClick={onFollow}>
+      <button className="btn absolute bottom-0 right-0" onClick={onFollow}>
         Suivi →
       </button>
     </div>
   );
 }
 
-function Search({ jobs, favs, onToggleFav }) {
+function Search({ jobs, favs, onAddFav }) {
   return (
     <section className="space-y-4">
       <div className="card">
         <div className="card-body flex items-center justify-between">
           <div>
             <div className="title">Stages recommandés</div>
-            <div className="muted mt-1">3 offres affichées à chaque recherche</div>
+            <div className="muted mt-1">3 offres affichées</div>
           </div>
           <span className="badge">{jobs.length} résultats</span>
         </div>
       </div>
 
       <ul className="space-y-3">
-        {jobs.map((job) => (
-          <li key={job.id} className="card">
-            <div className="card-body">
-              <div className="flex items-start justify-between gap-3">
+        {jobs.map((job) => {
+          const saved = favs.has(job.id);
+          return (
+            <li key={job.id} className="card">
+              <div className="card-body flex items-start justify-between gap-3">
                 <div>
                   <div className="title">{job.title}</div>
                   <div className="muted mt-1">
                     {job.company} — {job.city}
                   </div>
-                  {job.company === "Ynov" && <div className="badge mt-2">Partenaire Ynov</div>}
+                  {job.company === "Ynov" && (
+                    <div className="badge mt-2">Partenaire Ynov</div>
+                  )}
                 </div>
 
-                <div className="flex shrink-0 gap-2">
-                  <a className="btn" href={job.url} target="_blank" rel="noopener">
-                    Voir
-                  </a>
-                  <button className="btn" type="button" onClick={() => onToggleFav(job.id)}>
-                    {favs.has(job.id) ? "Sauvegardé" : "Favori"}
-                  </button>
-                </div>
+                <button
+                  className={`btn ${saved ? "opacity-50 cursor-not-allowed" : ""}`}
+                  disabled={saved}
+                  onClick={() => onAddFav(job.id)}
+                >
+                  {saved ? "Enregistré" : "Enregistrer"}
+                </button>
               </div>
-            </div>
-          </li>
-        ))}
+            </li>
+          );
+        })}
       </ul>
     </section>
   );
@@ -184,7 +190,7 @@ function Favorites({ jobs, onRemoveFav }) {
         <div className="card-body flex items-center justify-between">
           <div>
             <div className="title">Favoris</div>
-            <div className="muted mt-1">Gère ta shortlist</div>
+            <div className="muted mt-1">Suppression possible ici uniquement</div>
           </div>
           <span className="badge">{jobs.length}</span>
         </div>
@@ -205,7 +211,7 @@ function Favorites({ jobs, onRemoveFav }) {
                     {job.company} — {job.city}
                   </div>
                 </div>
-                <button className="btn" type="button" onClick={() => onRemoveFav(job.id)}>
+                <button className="btn" onClick={() => onRemoveFav(job.id)}>
                   Supprimer
                 </button>
               </div>
@@ -221,11 +227,9 @@ function Follow() {
   return (
     <section className="space-y-4">
       <div className="card">
-        <div className="card-body flex items-center justify-between">
-          <div>
-            <div className="title">Suivi</div>
-            <div className="muted mt-1">Vue rapide</div>
-          </div>
+        <div className="card-body">
+          <div className="title">Suivi</div>
+          <div className="muted mt-1">Vue synthétique</div>
         </div>
       </div>
 
@@ -244,11 +248,10 @@ function Settings({ onResetFavs }) {
       <div className="card">
         <div className="card-body">
           <div className="title">Paramètres</div>
-          <div className="muted mt-1">Actions rapides</div>
         </div>
       </div>
 
-      <button className="btn" type="button" onClick={onResetFavs}>
+      <button className="btn" onClick={onResetFavs}>
         Réinitialiser les favoris
       </button>
     </section>
@@ -269,7 +272,6 @@ function Stat({ label, value }) {
 function SideBtn({ active = false, disabled = false, onClick, children }) {
   return (
     <button
-      type="button"
       disabled={disabled}
       onClick={onClick}
       className={[
@@ -289,4 +291,9 @@ function label(page) {
   if (page === "favorites") return "Favoris";
   if (page === "follow") return "Suivi";
   return "Paramètres";
+}
+
+function removeAll(setFavs) {
+  localStorage.removeItem("favs");
+  setFavs(new Set());
 }
