@@ -2,18 +2,43 @@
 @tailwind components;
 @tailwind utilities;
 
-@layer components {
-  /* Style wireframe maquette */
-  .wf-stage { @apply bg-neutral-300 border border-neutral-500; }
-  .wf-block { @apply bg-neutral-200 border border-neutral-500; }
-  .wf-btn   { @apply wf-block px-4 py-2 text-sm; }
-  .wf-input { @apply bg-neutral-200 border border-neutral-500 px-4 py-2 text-sm outline-none; }
-  .wf-input:focus { @apply bg-white; }
-
-  /* pas d'arrondi / pas d'ombre */
-  .wf-stage, .wf-block, .wf-btn, .wf-input { border-radius: 0; box-shadow: none; }
+@layer base {
+  body {
+    @apply text-neutral-800;
+  }
 }
 
+@layer components {
+  .btn {
+    @apply border border-neutral-400 bg-neutral-200 px-4 py-2 text-sm;
+  }
+
+  .btn:hover {
+    @apply bg-neutral-100;
+  }
+
+  .btn:focus-visible {
+    @apply outline-none ring-2 ring-neutral-500;
+  }
+
+  .card {
+    @apply border border-neutral-400 bg-neutral-200;
+  }
+
+  .card-title {
+    @apply text-sm font-semibold;
+  }
+
+  .muted {
+    @apply text-xs text-neutral-600;
+  }
+}
+
+/* Accessibilité + éco */
 @media (prefers-reduced-motion: reduce) {
-  * { animation: none !important; transition: none !important; scroll-behavior: auto !important; }
+  * {
+    animation: none !important;
+    transition: none !important;
+    scroll-behavior: auto !important;
+  }
 }
