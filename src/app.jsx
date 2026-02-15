@@ -17,10 +17,7 @@ export default function App() {
     }
   });
 
-  const favJobs = useMemo(
-    () => SEARCH_JOBS.filter((j) => favs.has(j.id)),
-    [favs]
-  );
+  const favJobs = useMemo(() => SEARCH_JOBS.filter((j) => favs.has(j.id)), [favs]);
 
   const addFav = (id) => {
     setFavs((prev) => {
@@ -97,7 +94,15 @@ export default function App() {
                 )}
 
                 {page === "follow" && <Follow />}
-                {page === "settings" && <Settings onResetFavs={() => removeAll(setFavs)} />}
+
+                {page === "settings" && (
+                  <Settings
+                    onResetFavs={() => {
+                      localStorage.removeItem("favs");
+                      setFavs(new Set());
+                    }}
+                  />
+                )}
               </main>
             </div>
           </div>
@@ -110,7 +115,7 @@ export default function App() {
 function Home({ query, setQuery, onSearch, onFollow }) {
   return (
     <div className="relative grid h-full min-h-[520px] place-items-center">
-      <div className="w-full max-w-lg space-y-5 text-center">
+      <div className="w-full max-w-lg space-y-5 text-center md:-translate-x-[120px]">
         <div className="card">
           <div className="card-body">
             <div className="title">Recherche un stage</div>
@@ -118,17 +123,19 @@ function Home({ query, setQuery, onSearch, onFollow }) {
           </div>
         </div>
 
-        <input
-          className="w-full rounded-lg border border-slate-200 bg-white px-4 py-3 text-sm outline-none focus:ring-2 focus:ring-blue-400"
-          placeholder="Ex : développeur, react…"
-          value={query}
-          onChange={(e) => setQuery(e.target.value)}
-          onKeyDown={(e) => e.key === "Enter" && onSearch()}
-        />
+        <div className="mx-auto w-full max-w-md space-y-4">
+          <input
+            className="w-full rounded-lg border border-slate-200 bg-white px-4 py-3 text-sm outline-none focus:ring-2 focus:ring-blue-400"
+            placeholder="Ex : développeur web, react…"
+            value={query}
+            onChange={(e) => setQuery(e.target.value)}
+            onKeyDown={(e) => e.key === "Enter" && onSearch()}
+          />
 
-        <button className="btn btn-primary px-10" onClick={onSearch}>
-          Rechercher
-        </button>
+          <button className="btn btn-primary w-full" onClick={onSearch}>
+            Rechercher
+          </button>
+        </div>
       </div>
 
       <button className="btn absolute bottom-0 right-0" onClick={onFollow}>
@@ -147,7 +154,7 @@ function Search({ jobs, favs, onAddFav }) {
             <div className="title">Stages recommandés</div>
             <div className="muted mt-1">3 offres affichées</div>
           </div>
-          <span className="badge">{jobs.length} résultats</span>
+          <span className="badge">{jobs.length}</span>
         </div>
       </div>
 
@@ -190,7 +197,7 @@ function Favorites({ jobs, onRemoveFav }) {
         <div className="card-body flex items-center justify-between">
           <div>
             <div className="title">Favoris</div>
-            <div className="muted mt-1">Suppression possible ici uniquement</div>
+            <div className="muted mt-1">Suppression uniquement ici</div>
           </div>
           <span className="badge">{jobs.length}</span>
         </div>
@@ -291,9 +298,4 @@ function label(page) {
   if (page === "favorites") return "Favoris";
   if (page === "follow") return "Suivi";
   return "Paramètres";
-}
-
-function removeAll(setFavs) {
-  localStorage.removeItem("favs");
-  setFavs(new Set());
 }
